@@ -8,7 +8,6 @@ interface CoreLayoutProps {
 
 /**
  * Renders the core layout component.
- *
  * @param {CoreLayoutProps} props - The props for the component.
  * @param {React.ReactNode} props.children - The child components to render.
  * @return {React.ReactElement} The rendered core layout component.
