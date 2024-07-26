@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 /**
  * Renders the main content of the application.
@@ -8,7 +8,7 @@ import React from 'react';
  * @return {JSX.Element} The main container with the provided children.
  */
 const MainContent: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return <main className='flex-grow p-4'>{children}</main>;
+  return <main className="flex-grow p-4">{children}</main>;
 };
 
 export default MainContent;

@@ -9,14 +9,14 @@
  * @module
  */
 
-import { AnyDataModel } from 'convex/server';
-import type { GenericId } from 'convex/values';
+import { AnyDataModel } from "convex/server";
+import type { GenericId } from "convex/values";
 
 /**
  * No `schema.ts` file found!
  *
  * This generated code has permissive types like `Doc = any` because
- * Convex doesn't know your schema. If you'd like more type safety, see
+ * Convex doesn"t know your schema. If you"d like more type safety, see
  * https://docs.convex.dev/using/schemas for instructions on how to add a
  * schema file.
  *
