@@ -17,7 +17,7 @@ import {
   internalActionGeneric,
   internalMutationGeneric,
   internalQueryGeneric,
-} from "convex/server";
+} from 'convex/server';
 
 /**
  * Define a query in this Convex app's public API.
@@ -64,7 +64,7 @@ export const internalMutation = internalMutationGeneric;
  *
  * An action is a function which can execute any JavaScript code, including non-deterministic
  * code and code with side-effects, like calling third-party services.
- * They can be run in Convex's JavaScript environment or in Node.js using the "use node" directive.
+ * They can be run in Convex's JavaScript environment or in Node.js using the 'use node' directive.
  * They can interact with the database indirectly by calling queries and mutations using the {@link ActionCtx}.
  *
  * @param func - The action. It receives an {@link ActionCtx} as its first argument.
