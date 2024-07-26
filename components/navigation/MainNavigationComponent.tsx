@@ -3,6 +3,11 @@ import React from 'react';
 import Link from 'next/link';
 import { UserIcon, HomeIcon, SettingsIcon, LogoutIcon, NotificationIcon } from '@/public/Icons';
 
+/**
+ * Renders the main navigation component with links to different pages and icons for notifications, user profile, and logout.
+ *
+ * @return {ReactElement} The main navigation component.
+ */
 export const MainNavigation: React.FC = () => {
   return (
     <nav className="flex justify-between items-center p-4 bg-gradient-to-r from-primary to-secondary shadow-3d-dark">
