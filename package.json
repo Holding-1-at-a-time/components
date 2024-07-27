@@ -43,6 +43,7 @@
     "react-day-picker": "8.10.1",
     "react-dom": "19.0.0-rc-f994737d14-20240522",
     "react-hook-form": "^7.52.1",
+    "svix": "^1.25.0",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-border-gradient-radius": "^3.0.1",

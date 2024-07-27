@@ -23,7 +23,7 @@ import {
 import type { DataModel } from "./dataModel.js";
 
 /**
- * Define a query in this Convex app"s public API.
+ * Define a query in this Convex app's public API.
  *
  * This function will be allowed to read your Convex database and will be accessible from the client.
  *
@@ -43,7 +43,7 @@ export declare const query: QueryBuilder<DataModel, "public">;
 export declare const internalQuery: QueryBuilder<DataModel, "internal">;
 
 /**
- * Define a mutation in this Convex app"s public API.
+ * Define a mutation in this Convex app's public API.
  *
  * This function will be allowed to modify your Convex database and will be accessible from the client.
  *
@@ -63,11 +63,11 @@ export declare const mutation: MutationBuilder<DataModel, "public">;
 export declare const internalMutation: MutationBuilder<DataModel, "internal">;
 
 /**
- * Define an action in this Convex app"s public API.
+ * Define an action in this Convex app's public API.
  *
  * An action is a function which can execute any JavaScript code, including non-deterministic
  * code and code with side-effects, like calling third-party services.
- * They can be run in Convex"s JavaScript environment or in Node.js using the "use node" directive.
+ * They can be run in Convex's JavaScript environment or in Node.js using the "use node" directive.
  * They can interact with the database indirectly by calling queries and mutations using the {@link ActionCtx}.
  *
  * @param func - The action. It receives an {@link ActionCtx} as its first argument.
