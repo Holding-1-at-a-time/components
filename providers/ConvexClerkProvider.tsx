@@ -4,7 +4,6 @@ import { ClerkProvider, useAuth } from "@clerk/nextjs";
 import { ConvexReactClient } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import React, { ReactNode } from "react";
-import "./index.css";
 
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL as string);
 if (!process.env.NEXT_PUBLIC_CONVEX_URL) {
