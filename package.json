@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.2.10",
     "@clerk/nextjs": "^5.2.8",
     "@datadog/browser-rum": "^5.23.0",
     "@heroicons/react": "^2.1.5",

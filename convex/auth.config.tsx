@@ -1,4 +1,4 @@
-const config = {
+export default {
     providers: [
       {
         // Configure CLERK_JWT_ISSUER_DOMAIN on the Convex Dashboard
@@ -9,4 +9,3 @@ const config = {
     ],
   };
   
-  export default config;

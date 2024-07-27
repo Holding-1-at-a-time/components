@@ -1,6 +1,6 @@
 import { SignUp } from "@clerk/nextjs";
 
-const page = () => {
+const signup = () => {
     return (
         <div className="flex-center glassmorphism-auth-w-full h-screen">
             <SignUp />
@@ -8,4 +8,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default signup;

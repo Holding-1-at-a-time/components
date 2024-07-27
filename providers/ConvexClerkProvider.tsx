@@ -1,30 +1,30 @@
 "use client";
 
 import { ClerkProvider, useAuth } from "@clerk/nextjs";
-import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { ConvexReactClient } from "convex/react";
-import { ReactNode } from "react";
+import { ConvexProviderWithClerk } from "convex/react-clerk";
+import React, { ReactNode } from "react";
+import "./index.css";
 
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL as string);
+if (!process.env.NEXT_PUBLIC_CONVEX_URL) {
+    throw new Error("Missing Convex Public URL")
+}
 
 const ConvexClerkProvider = ({ children }: { children: ReactNode }) => (
     <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY as string} appearance={{
-        layout: {
-            socialButtonsVariant: "iconButton",
-            logoImageUrl: "/icons/auth-logo.svg"
-        },
-        variables: {
-            colorBackground: "#00AE98",
-            colorPrimary: "",
-            colorText: "white",
-            colorInputBackground: "#1b1f29",
-            colorInputText: "white",
-        }
     }}>
-        <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
-            {children}
-        </ConvexProviderWithClerk>
-    </ClerkProvider>
+        ReactDOM.createRoot(document.getElementById("root")!).render (
+        <React.StrictMode>
+            <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
+                <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+                    {children}
+                </ConvexProviderWithClerk>
+            </ClerkProvider>
+        </React.StrictMode>
+   </ClerkProvider >
 );
+
+
 
 export default ConvexClerkProvider;
