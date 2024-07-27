@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import ConvexClerkProvider from "../providers/ConvexClerkProvider";
-import "./globals.css";
 
 const manrope = Manrope({ subsets: ["latin"] });
 
