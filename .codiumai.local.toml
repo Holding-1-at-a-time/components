@@ -92,8 +92,7 @@ describe("something", () => {
 ## It"s helpful to clear the output (right-click -> clear) and then run the tests again.
 ##
 # overrideTestRunScript = "npx jest --runTestsByPath TEST_FILEPATH"
- Jest:
-    pnpm test 
+ Jest: "pnpm test" 
 ## A multiline string, delimited with triple-quotes ("""),
 ## containing import declaration to use in each test file. 
 # overrideImports = """ 
