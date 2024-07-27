@@ -5,7 +5,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
-    "noEmit": true, // Typically used for TypeScript projects that don't output JavaScript
+    "noEmit": true, // Typically used for TypeScript projects that don"t output JavaScript
     "esModuleInterop": true,
     "module": "ESNext", // Use "ESNext" instead of "esnext" for consistency
     "moduleResolution": "node", // Use "node" for module resolution in most cases

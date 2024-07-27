@@ -29,7 +29,7 @@ const createJestConfig = (nextConfig: Config): Config => {
     // The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.
     maxWorkers: "90%",
 
-    // An array of directory names to be searched recursively up from the requiring module's location
+    // An array of directory names to be searched recursively up from the requiring module"s location
     moduleDirectories: ["node_modules"],
 
     // An array of file extensions your modules use
@@ -53,7 +53,7 @@ const createJestConfig = (nextConfig: Config): Config => {
     // A list of paths to directories that Jest should use to search for files in
     // roots: ["<rootDir>"],
 
-    // Allows you to use a custom runner instead of Jest's default test runner
+    // Allows you to use a custom runner instead of Jest"s default test runner
     runner: "jest-runner",
 
     // The test environment that will be used for testing

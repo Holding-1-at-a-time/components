@@ -16,10 +16,10 @@ import SettingsIcon from "/public/icons/settings.svg";
  * The component uses the Clerk `useUser` hook to determine if the user is
  * signed in or not. The hook returns an object with the following properties:
  *
- *   - `isLoaded`: A boolean indicating whether the user's sign-in status has
+ *   - `isLoaded`: A boolean indicating whether the user"s sign-in status has
  *     been loaded.
  *   - `isSignedIn`: A boolean indicating whether the user is signed in or not.
- *   - `user`: The user's profile information if the user is signed in.
+ *   - `user`: The user"s profile information if the user is signed in.
  *
  * @return {ReactElement} The navigation bar component.
  */
@@ -33,11 +33,11 @@ const NavigationBar: React.FC = () => {
   return (
     <nav className="flex items-center justify-between p-4 bg-gradient-to-r from-primary to-primary-light shadow-lg">
       <div className="flex items-center space-x-4">
-        <Link href="/' className='flex items-center space-x-2 text-white">
+        <Link href="/" className="flex items-center space-x-2 text-white">
           <HomeIcon className="w-6 h-6" />
           <span>Home</span>
         </Link>
-        <Link href="/settings' className='flex items-center space-x-2 text-white">
+        <Link href="/settings" className="flex items-center space-x-2 text-white">
           <SettingsIcon className="w-6 h-6" />
           <span>Settings</span>
         </Link>
@@ -46,7 +46,7 @@ const NavigationBar: React.FC = () => {
         {isLoaded && isSignedIn ? (
           <UserButton />
         ) : (
-          <Link href="/sign-in' className='text-white">
+          <Link href="/sign-in" className="text-white">
             Sign In
           </Link>
         )}

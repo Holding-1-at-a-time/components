@@ -100,7 +100,7 @@ describe("Component", () => {
     it("should open user avatar dropdown menu with user options", () => {
       render(<Component />);
   
-      const avatarButton = screen.getByRole("button', { name: 'Toggle user menu" });
+      const avatarButton = screen.getByRole("button", { name: "Toggle user menu" });
       userEvent.click(avatarButton);
   
       const profileOption = screen.getByText("Profile");
@@ -123,17 +123,17 @@ describe("Component", () => {
       expect(screen.getByText("Contact")).toBeInTheDocument();
   
       // Check if the dropdown menu is displayed and functional
-      userEvent.click(screen.getByRole("button', { name: 'Toggle user menu" }));
+      userEvent.click(screen.getByRole("button", { name: "Toggle user menu" }));
       expect(screen.getByText("John Doe")).toBeInTheDocument();
       expect(screen.getByText("Profile")).toBeInTheDocument();
       expect(screen.getByText("Settings")).toBeInTheDocument();
       expect(screen.getByText("Logout")).toBeInTheDocument();
   
       // Check if the logo link is displayed
-      expect(screen.getByRole("link', { name: 'Acme Business Solutions" })).toBeInTheDocument();
+      expect(screen.getByRole("link", { name: "Acme Business Solutions" })).toBeInTheDocument();
   
       // Check if the home icon link is displayed
-      expect(screen.getByRole("link', { name: 'Home" })).toBeInTheDocument();
+      expect(screen.getByRole("link", { name: "Home" })).toBeInTheDocument();
   
       // Check if the search input is displayed
       expect(screen.getByPlaceholderText("Search")).toBeInTheDocument();

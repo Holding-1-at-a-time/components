@@ -127,7 +127,7 @@ export default function VehicleAssessmentForm() {
       <CardContent className="grid gap-6">
         <div className="grid grid-cols-2 gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="make' className='text-white">Make</Label>
+            <Label htmlFor="make" className="text-white">Make</Label>
             <Input
               id="make"
               placeholder="Enter vehicle make"
@@ -137,7 +137,7 @@ export default function VehicleAssessmentForm() {
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="model' className='text-white">Model</Label>
+            <Label htmlFor="model" className="text-white">Model</Label>
             <Input
               id="model"
               placeholder="Enter vehicle model"
@@ -149,7 +149,7 @@ export default function VehicleAssessmentForm() {
         </div>
         <div className="grid grid-cols-3 gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="year' className='text-white">Year</Label>
+            <Label htmlFor="year" className="text-white">Year</Label>
             <Input
               id="year"
               type="number"
@@ -160,7 +160,7 @@ export default function VehicleAssessmentForm() {
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="vin' className='text-white">VIN</Label>
+            <Label htmlFor="vin" className="text-white">VIN</Label>
             <div className="flex items-center gap-2">
               <Input
                 id="vin"
@@ -169,14 +169,14 @@ export default function VehicleAssessmentForm() {
                 onChange={(e) => setVehicleDetails({ ...vehicleDetails, vin: e.target.value })}
                 className="text-black"
               />
-              <Button size="sm' variant='outline' onClick={handleVINScan} className='text-white border-white">
+              <Button size="sm" variant="outline" onClick={handleVINScan} className="text-white border-white">
                 <CameraIcon className="h-4 w-4" />
                 <span className="sr-only">Scan VIN</span>
               </Button>
             </div>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="color' className='text-white">Color</Label>
+            <Label htmlFor="color" className="text-white">Color</Label>
             <Input
               id="color"
               placeholder="Enter vehicle color"
@@ -188,7 +188,7 @@ export default function VehicleAssessmentForm() {
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="bodyType' className='text-white">Body Type</Label>
+            <Label htmlFor="bodyType" className="text-white">Body Type</Label>
             <Select
               id="bodyType"
               value={vehicleDetails.bodyType}
@@ -207,7 +207,7 @@ export default function VehicleAssessmentForm() {
             </Select>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="condition' className='text-white">Current Condition</Label>
+            <Label htmlFor="condition" className="text-white">Current Condition</Label>
             <Select
               id="condition"
               value={vehicleDetails.condition}
@@ -262,7 +262,7 @@ export default function VehicleAssessmentForm() {
                 onChange={(e) => setNewCustomization(e.target.value)}
                 className="text-black"
               />
-              <Button size="sm' onClick={handleAddCustomization} className='text-white border-white">Add</Button>
+              <Button size="sm" onClick={handleAddCustomization} className="text-white border-white">Add</Button>
             </div>
             {customizations.map((customization, index) => (
               <div key={index} className="flex items-center gap-2">
@@ -283,7 +283,7 @@ export default function VehicleAssessmentForm() {
           </div>
           <div className="grid gap-2">
             <div className="flex items-center gap-2">
-              <Button size="sm' variant='outline' onClick={() => document.getElementById('image-upload').click()} className='text-white border-white">
+              <Button size="sm" variant="outline" onClick={() => document.getElementById("image-upload").click()} className="text-white border-white">
                 <CameraIcon className="h-4 w-4 mr-2" />
                 Upload Images
               </Button>
@@ -295,7 +295,7 @@ export default function VehicleAssessmentForm() {
                 onChange={handleImageUpload}
                 className="hidden"
               />
-              <Button size="sm' variant='outline' onClick={() => document.getElementById('video-upload').click()} className='text-white border-white">
+              <Button size="sm" variant="outline" onClick={() => document.getElementById("video-upload").click()} className="text-white border-white">
                 <VideoIcon className="h-4 w-4 mr-2" />
                 Upload Videos
               </Button>
@@ -319,8 +319,8 @@ export default function VehicleAssessmentForm() {
         <div className="text-gray-200">
           Estimated Total: <span className="font-medium text-white">${calculateTotal().toFixed(2)}</span>
         </div>
-        <Button size="lg' onClick={handleSubmit} disabled={isSubmitting} className='text-white border-white">
-          {isSubmitting ? "Submitting...' : 'Submit Order"}
+        <Button size="lg" onClick={handleSubmit} disabled={isSubmitting} className="text-white border-white">
+          {isSubmitting ? "Submitting..." : "Submit Order"}
         </Button>
       </CardFooter>
     </Card>
@@ -342,7 +342,7 @@ function CameraIcon(props) {
       strokeLinejoin="round"
     >
       <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
-      <circle cx="12' cy='13' r='3" />
+      <circle cx="12" cy="13" r="3" />
     </svg>
   );
 }
@@ -362,7 +362,7 @@ function VideoIcon(props) {
       strokeLinejoin="round"
     >
       <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5" />
-      <rect x="2' y='6' width='14' height='12' rx='2" />
+      <rect x="2" y="6" width="14" height="12" rx="2" />
     </svg>
   );
 }

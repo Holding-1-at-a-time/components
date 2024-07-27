@@ -62,7 +62,7 @@ export default function Component() {
     <div className="relative w-full max-w-[800px] mx-auto">
       <div className="relative w-full aspect-[16/9] rounded-lg overflow-hidden shadow-lg animated-3d gradient-bg">
         <div className="absolute inset-0 bg-gradient-radial from-[#00AE98] to-[#00AE98]/50 z-0" />
-        <img src="/placeholder.svg' alt='Vehicle Diagram' className='object-contain z-10" />
+        <img src="/placeholder.svg" alt="Vehicle Diagram" className="object-contain z-10" />
         {vehicleParts.map((part, index) => (
           <div
             key={index}
@@ -86,7 +86,7 @@ export default function Component() {
           <PopoverContent className="w-[300px] p-4 bg-background shadow-lg rounded-md">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-bold">{activeHotspot.name}</h3>
-              <Button variant="ghost' size='icon' className='hover:bg-muted" onClick={handleCloseHotspot}>
+              <Button variant="ghost" size="icon" className="hover:bg-muted" onClick={handleCloseHotspot}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
