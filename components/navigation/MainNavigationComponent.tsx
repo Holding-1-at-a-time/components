@@ -1,4 +1,4 @@
-// components/navigation/MainNavigation.tsx
+// components/navigation/MainNavigationComponent.tsx
 import React from 'react';
 import Link from 'next/link';
 import { UserIcon, HomeIcon, SettingsIcon, LogoutIcon, NotificationIcon } from '@/public/Icons';
