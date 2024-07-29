@@ -1,4 +1,5 @@
 import { datadogRum } from "@datadog/browser-rum";
+import './tracer'
 
 datadogRum.init({
     applicationId: "778911bc-20cc-4a35-a24c-58e9b15f1a25",

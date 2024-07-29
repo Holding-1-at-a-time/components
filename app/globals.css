@@ -1,3 +1,5 @@
+// globals.css
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -148,6 +150,88 @@ body {
 .spinner-layer.delay-2 {
   animation-delay: -2s;
 }
+
+/* Custom styles and animations */
+:root {
+  --backgroundone-dark: #1a1a1a;
+  --backgroundone-light: #f8f9fa;
+  --primary-color: #00AE98;
+  --secondary-color: #707070;
+  --primary-foreground: #ffffff;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+.animated-3d {
+  transition: transform 0.5s;
+}
+
+.animated-3d:hover {
+  transform: rotateY(20deg) scale(1.05);
+}
+
+.hover\:shadow-3d:hover {
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.bg-backgroundone-dark {
+  background-color: var(--backgroundone-dark);
+}
+
+.bg-backgroundone-light {
+  background-color: var(--backgroundone-light);
+}
+
+.table th, .table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+}
+
+.badge.default {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.badge.secondary {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+.btn.outline {
+  border-color: #e5e7eb;
+  background-color: white;
+}
+
+.btn.icon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.icon {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+}
+
 
 @keyframes spinner-3d {
   0% {

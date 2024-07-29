@@ -101,7 +101,7 @@ const VehicleAssessmentContainer: React.FC = () => {
         description: 'Your vehicle assessment has been successfully submitted.',
       });
     } catch (error) {
-      console.error('Error submitting assessment:', error);
+      Console.error('Error submitting assessment:', error);
       toast({
         title: 'Submission Error',
         description: 'There was an error submitting your assessment. Please try again.',

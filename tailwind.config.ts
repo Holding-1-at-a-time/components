@@ -1,3 +1,4 @@
+ // tailwind.confic.ts
 
 import "@tailwindcss/aspect-ratio";
 import "@tailwindcss/forms";

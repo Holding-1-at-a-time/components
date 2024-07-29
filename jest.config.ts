@@ -4,6 +4,9 @@ import nextJest from "next/jest.js";
 const createJestConfig = (nextConfig: Config): Config => {
   return {
     ...nextConfig,
+    testEnvironment: 'jsdom',
+    testMatch: ['**/__tests__/**/*.test.ts?(x)'],
+    setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 
     // The directory where Jest should store its cached dependency information
     cacheDirectory: "C:/Users/rrome/node_modules/.cache/jest",
@@ -56,15 +59,7 @@ const createJestConfig = (nextConfig: Config): Config => {
     // Allows you to use a custom runner instead of Jest"s default test runner
     runner: "jest-runner",
 
-    // The test environment that will be used for testing
-    testEnvironment: "jsdom",
-
-    // The glob patterns Jest uses to detect test files
-    testMatch: [
-      "**/__tests__/**/*.[jt]s?(x)",
-      "**/?(*.)+(spec|test).[tj]s?(x)",
-    ],
-
+  
     // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
     testPathIgnorePatterns: [
       "\\\\node_modules\\\\",

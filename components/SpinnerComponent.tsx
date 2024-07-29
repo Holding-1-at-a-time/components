@@ -11,3 +11,5 @@ export default function Spinner() {
     </div>
   );
 }
+
+export function Spinner();
