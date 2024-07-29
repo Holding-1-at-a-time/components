@@ -1,6 +1,75 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
+
+export const create = mutation({
+  args: {
+    organizationId: v.string(),
+    make: v.string(),
+    model: v.string(),
+    year: v.number(),
+    vin: v.string(),
+    licensePlate: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const existingVehicle = await ctx.db
+      .query("vehicles")
+      .withIndex("by_vin", (q) => q.eq("vin", args.vin))
+      .first();
+
+    if (existingVehicle) {
+      throw new Error("Vehicle with this VIN already exists");
+    }
+
+    const vehicleId = await ctx.db.insert("vehicles", {
+      ...args,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+
+    return vehicleId;
+  },
+});
+
+export const update = mutation({
+  args: {
+    id: v.id("vehicles"),
+    make: v.optional(v.string()),
+    model: v.optional(v.string()),
+    year: v.optional(v.number()),
+    licensePlate: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const { id, ...updateFields } = args;
+    await ctx.db.patch(id, { ...updateFields, updatedAt: Date.now() });
+  },
+});
+
+export const list = query({
+  args: { 
+    organizationId: v.string(),
+    search: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    let vehiclesQuery = ctx.db
+      .query("vehicles")
+      .withIndex("by_organization", (q) => q.eq("organizationId", args.organizationId));
+
+    if (args.search) {
+      vehiclesQuery = vehiclesQuery.search("search", args.search);
+    }
+
+    return await vehiclesQuery.collect();
+  },
+});
+
+export const getById = query({
+  args: { id: v.id("vehicles") },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.id);
+  },
+});
+
 export const create = mutation({
   args: {
     organizationId: v.string(),

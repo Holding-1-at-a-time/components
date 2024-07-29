@@ -1,0 +1,18 @@
+name: components
+id: 'ari:cloud:compass:e44838c9-4d9c-4650-bce4-b7134d1f1d97:component/d0e829c5-8a49-4498-bbc7-ec2fc8b2a1f1/819e1a48-fdef-427c-a800-b19a3e24abd4'
+description: SaaS web app
+configVersion: 1
+typeId: UI_ELEMENT
+ownerId: 'ari:cloud:identity::team/c6850c13-053e-407e-8d67-7cca00da580f'
+fields:
+  tier: 4
+links:
+  - name: null
+    type: REPOSITORY
+    url: 'https://github.com/Holding-1-at-a-time/components.git'
+relationships: {}
+labels: null
+customFields: null
+
+# Learn more about formatting compass.yml:
+# https://go.atlassian.com/compass-yml-format

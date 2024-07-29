@@ -10,13 +10,14 @@ import { toast } from "@/components/ui/use-toast";
 import { usePermissions } from '@/hooks/usePermissions';
 import { VehicleDetails, Service, Customization, UploadedFile } from '@/types';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Console } from 'winston/lib/winston/transports';
 
 interface AIEstimationProps {
   selfAssessmentId: string;
 }
 
 export function AIEstimation({ selfAssessmentId }: AIEstimationProps) {
-  const selfAssessment = useQuery(api.selfAssessments.getSelfAssessment, { id: selfAssessmentId });
+  const selfAssessment = useQuery(api.selfAssessment.getSelfAssessment, { id: selfAssessmentId });
 
   if (!selfAssessment) {
     return <Spinner />;
@@ -64,7 +65,7 @@ interface AIAnalysis {
   };
 }
 
-export function AIEstimation({ vehicleDetails, selectedServices, customizations, uploadedFiles }: AIEstimationProps) {
+export function aiEstimation({ vehicleDetails, selectedServices, customizations, uploadedFiles }: AIEstimationProps) {
   const { organization } = useOrganization();
   const { hasPermission } = usePermissions();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -99,13 +100,13 @@ export function AIEstimation({ vehicleDetails, selectedServices, customizations,
         uploadedFileIds: uploadedFiles.map(f => f.id),
       });
 
-      setAiAnalysis(result);
+      setAIAnalisyst(setAiAnalysis, result);
       toast({
         title: "Analysis Complete",
         description: "AI estimation has been generated successfully.",
       });
     } catch (error) {
-      console.error('Error generating AI analysis:', error);
+      console.info('Error generating AI analysis:', error);
       toast({
         title: "Analysis Error",
         description: "Failed to generate AI analysis. Please try again.",
@@ -113,6 +114,10 @@ export function AIEstimation({ vehicleDetails, selectedServices, customizations,
       });
     } finally {
       setIsAnalyzing(false);
+    }
+
+    function setAiAnalysis(result: { estimatedTotal: number; analysis: string; }) {
+      setAiAnalysis(result);
     }
   }, [organization, vehicleDetails, selectedServices, customizations, uploadedFiles, getAIAnalysis, hasPermission]);
 
@@ -180,10 +185,14 @@ export function AIEstimation({ vehicleDetails, selectedServices, customizations,
       </CardContent>
       <CardFooter>
         <Button onClick={generateAIAnalysis} disabled={isAnalyzing}>
-          {isAnalyzing ? <Spinner className="mr-2" /> : null}
+          {isAnalyzing ? <Spinner className='hover:bg-green-500 to-true-gray-500'/>}
           {isAnalyzing ? 'Analyzing...' : 'Generate AI Analysis'}
         </Button>
       </CardFooter>
     </Card>
   );
+}
+
+function setAIAnalisyst(setAiAnalysis: (result: { estimatedTotal: number; analysis: string; }) => void, result: { estimatedTotal: number; analysis: string; }) {
+  setAiAnalysis(result);
 }
