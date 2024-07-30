@@ -1,0 +1,14 @@
+{
+    "cSpell.words": [
+        "Analisyst",
+        "backgroundone",
+        "Hotspot",
+        "lucide",
+        "nextjs",
+        "odaat"
+    ],
+    "sonarlint.connectedMode.project": {
+        "connectionId": "holding-1-at-a-time",
+        "projectKey": "Holding-1-at-a-time_components"
+    }
+}
