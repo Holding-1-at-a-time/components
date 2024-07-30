@@ -5,7 +5,7 @@ import { api } from '@/convex/_generated/api';
 export const useAnalytics = () => {
   const logEvent = useMutation(api.analytics.logEvent);
 
-  const trackEvent = useCallback((eventName: string, properties?: Record<string, any>) => {
+  const trackEvent = useCallback((eventName: string, properties?: Record<string, []>) => {
     logEvent({ eventName, properties });
   }, [logEvent]);
 

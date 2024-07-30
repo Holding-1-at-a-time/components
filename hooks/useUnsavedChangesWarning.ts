@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 
 export const useUnsavedChangesWarning = (isDirty: boolean) => {
   const router = useRouter();
@@ -9,13 +9,12 @@ export const useUnsavedChangesWarning = (isDirty: boolean) => {
     const handleWindowClose = (e: BeforeUnloadEvent) => {
       if (!isDirty) return;
       e.preventDefault();
-      return (e.returnValue = warningText);
     };
-    const handleBrowseAway = () => {
+    const handleBrowseAway = (e: BeforeUnloadEvent) => {
       if (!isDirty) return;
-      if (window.confirm(warningText)) return;
+      e.preventDefault();
       router.events.emit('routeChangeError');
-      throw 'routeChange aborted.';
+      throw new Error( 'routeChange aborted.');
     };
 
     window.addEventListener('beforeunload', handleWindowClose);

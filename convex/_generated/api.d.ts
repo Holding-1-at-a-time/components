@@ -16,6 +16,7 @@ import type {
 } from "convex/server";
 import type * as actionWithOllama from "../actionWithOllama.js";
 import type * as ai from "../ai.js";
+import type * as analytics from "../analytics.js";
 import type * as assessment from "../assessment.js";
 import type * as client from "../client.js";
 import type * as fileStorage from "../fileStorage.js";
@@ -37,6 +38,7 @@ import type * as vehicles from "../vehicles.js";
 declare const fullApi: ApiFromModules<{
   actionWithOllama: typeof actionWithOllama;
   ai: typeof ai;
+  analytics: typeof analytics;
   assessment: typeof assessment;
   client: typeof client;
   fileStorage: typeof fileStorage;
