@@ -4,6 +4,10 @@ import { ConvexError, v } from "convex/values";
 import { action, mutation, query } from "./_generated/server";
 import { actionWithOllama } from "./actionWithOllama";
 import { generateUploadUrl, storageClient } from './fileStorage';
+<<<<<<< HEAD
+=======
+import { loggers } from "winston";
+>>>>>>> c51587409a955418810f61cf695203e9470b93e5
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 5000; // 5 seconds
@@ -65,16 +69,27 @@ export const createSelfAssessment = mutation({
     return selfAssessmentId;
   },
 });
+<<<<<<< HEAD
 
+=======
+>>>>>>> c51587409a955418810f61cf695203e9470b93e5
 export const generateAIEstimation = action({
   args: { selfAssessmentId: v.id("selfAssessments") },
   handler: async (ctx, args) => {
     const { selfAssessmentId } = args;
 
     let retries = 0;
+<<<<<<< HEAD
     while (retries < MAX_RETRIES) {
       try {
         const selfAssessment = await ctx.db.get(selfAssessmentId);
+=======
+
+    while (retries < MAX_RETRIES) {
+      try {
+        const selfAssessment = await ctx.db.get(args.selfAssessmentId);
+
+>>>>>>> c51587409a955418810f61cf695203e9470b93e5
         if (!selfAssessment) {
           throw new Error("Self-assessment not found");
         }
@@ -90,7 +105,10 @@ export const generateAIEstimation = action({
 
         const { estimatedTotal, detailedAnalysis } = JSON.parse(aiEstimation);
 
+<<<<<<< HEAD
         // Update self-assessment with AI estimation
+=======
+>>>>>>> c51587409a955418810f61cf695203e9470b93e5
         await ctx.db.patch(selfAssessmentId, {
           aiEstimation: {
             estimatedTotal,
@@ -102,7 +120,10 @@ export const generateAIEstimation = action({
 
         return;
       } catch (error) {
+<<<<<<< HEAD
         console.error(`AI estimation failed (attempt ${retries + 1}):`, error);
+=======
+>>>>>>> c51587409a955418810f61cf695203e9470b93e5
         retries++;
         if (retries < MAX_RETRIES) {
           await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
@@ -123,11 +144,19 @@ export const getSelfAssessment = query({
   args: { id: v.id("selfAssessments") },
   handler: async (ctx, args) => {
     const { userId } = await ctx.auth.getUserIdentity() ?? {};
+<<<<<<< HEAD
+=======
+
+>>>>>>> c51587409a955418810f61cf695203e9470b93e5
     if (!userId) {
       throw new ConvexError("Unauthorized: User must be logged in");
     }
 
     const selfAssessment = await ctx.db.get(args.id);
+<<<<<<< HEAD
+=======
+
+>>>>>>> c51587409a955418810f61cf695203e9470b93e5
     if (!selfAssessment) {
       throw new ConvexError("Self-assessment not found");
     }
@@ -146,7 +175,10 @@ export const getSelfAssessment = query({
     return selfAssessment;
   },
 });
+<<<<<<< HEAD
 
+=======
+>>>>>>> c51587409a955418810f61cf695203e9470b93e5
 export const listSelfAssessments = query({
   args: { organizationId: v.string() },
   handler: async (ctx, args) => {

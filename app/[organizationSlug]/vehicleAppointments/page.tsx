@@ -9,8 +9,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
+<<<<<<< HEAD
 import { Spinner } from '@/components/ui/spinner';
 import { VehicleForm } from '@/components/VehicleForm';
+=======
+import { Spinner } from '@/components/SpinnerComponent';
+import { VehicleForm } from '@/components/VehicleFormComponent';
+>>>>>>> c51587409a955418810f61cf695203e9470b93e5
 import { AppointmentForm } from '@/components/AppointmentForm';
 
 export default function VehicleAppointmentManagement() {

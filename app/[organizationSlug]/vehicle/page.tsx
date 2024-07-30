@@ -12,7 +12,10 @@ import { toast } from '@/components/ui/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import VehicleForm from '@/components/assessments/VehicleAssessmentForm';
 import Spinner from '@/components/SpinnerComponent';
+<<<<<<< HEAD
 import { usePermissions } from '@/hooks/usePermissions';
+=======
+>>>>>>> c51587409a955418810f61cf695203e9470b93e5
 import { FilePenIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
