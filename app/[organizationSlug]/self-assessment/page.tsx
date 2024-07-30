@@ -25,6 +25,10 @@ import { useAnalytics } from '@/hooks/useAnalytics';
 import { useUnsavedChangesWarning } from '@/hooks/useUnsavedChangesWarning';
 import { Id } from '@/convex/_generated/dataModel';
 import { logger } from '@/lib/logger';
+import { VINScanner } from '@/components/VINScanner';
+import { EstimationService } from '@/services/EstimationService';
+import { VehicleInfo } from '@/types/VehicleInfo';
+
 
 const STEPS = ['vehicleDetails', 'conditionAssessment', 'serviceSelection', 'fileUpload', 'review'] as const;
 type Step = typeof STEPS[number];
@@ -100,6 +104,10 @@ export default function SelfAssessmentPage() {
     }
   };
 
+
+  const handleVINDecoded = useCallback((vehicleInfo: VehicleInfo) => {
+    setValue('vehicleInfo', vehicleInfo, { shouldValidate: true });
+
   const validateStep = useCallback((step: Step): boolean => {
     const stepFields = {
       vehicleDetails: ['make', 'model', 'year', 'vin'],
@@ -138,6 +146,15 @@ export default function SelfAssessmentPage() {
     fileUpload: <FileUploads />,
     review: <ReviewStep onEdit={() => handleStepChange('vehicleDetails')} onSubmit={handleSubmit(onSubmit)} />,
   };
+
+      // Get recommended services based on vehicle info
+      const recommendedServices = EstimationService.getRecommendedServices(vehicleInfo);
+      setValue('recommendedServices', recommendedServices, { shouldValidate: true });
+      
+      // Calculate initial estimate
+      const initialEstimate = EstimationService.calculateBasePrice(vehicleInfo, recommendedServices);
+      setValue('initialEstimate', initialEstimate, { shouldValidate: true });
+    }, [setValue]);
 
   return (
     <ErrorBoundary>

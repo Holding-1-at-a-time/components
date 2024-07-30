@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/SpinnerComponent";
 import { toast } from "@/components/ui/use-toast";
-import { usePermissions } from '@/hooks/usePermissions';
 import { VehicleDetails, Service, Customization, UploadedFile } from '@/types';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Console } from 'winston/lib/winston/transports';
