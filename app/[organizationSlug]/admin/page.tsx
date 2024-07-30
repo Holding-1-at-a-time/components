@@ -1,39 +1,64 @@
-"use client";
-
-import React from 'react';
-import { useOrganization, useUser } from '@clerk/nextjs';
-import { useQuery, useMutation } from 'convex/react';
-import { api } from '@/convex/_generated/api';
-import Link from "next/link";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { BellIcon, BriefcaseIcon, FilePenIcon, HomeIcon, MountainIcon, SearchIcon, TrashIcon } from '@/components/Icons';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
-import { MountainIcon, HomeIcon, BriefcaseIcon, ReceiptIcon, CalendarIcon, WebcamIcon, CoinsIcon, UsersIcon, InfoIcon, SettingsIcon, BellIcon, SearchIcon, FilePenIcon, TrashIcon } from '@/components/Icons';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { toast } from '@/components/ui/use-toast';
+import { api } from '@/convex/_generated/api';
+import { Id } from '@/convex/_generated/dataModel';
+import { useOrganization, useUser } from '@clerk/nextjs';
+import { useMutation, useQuery } from 'convex/react';
+import Link from "next/link";
+import { stderr } from 'process';
+import { loggers } from 'winston';
+
+interface Client {
+  _id: string;
+  name: string;
+  email: string;
+  totalInvoices: number;
+}
 
 export default function AdminDashboard() {
   const { organization } = useOrganization();
   const { user } = useUser();
-  const clients = useQuery(api.clients.list, organization?.id ? { orgId: organization.id } : 'skip');
+  const clients = useQuery(api.client.list, organization?.id ? { orgId: organization.id } : 'skip');
   const invoices = useQuery(api.invoices.list, organization?.id ? { orgId: organization.id } : 'skip');
-  const deleteClient = useMutation(api.clients.deleteClient);
+  const deleteClient = useMutation(api.client.deleteClient);
 
   if (!organization || !user) {
     return <div>Loading...</div>;
   }
+const useCustomMutation = () => {
+  const handleDeleteClient = useMutation(api.client.deleteClient);
 
-  const handleDeleteClient = async (clientId: string) => {
+  const deleteClientById = async (clientId: Id<"clients">) => {
     try {
-      await deleteClient({ clientId });
+      await handleDeleteClient({ clientId });
+      toast({
+        title: "Client deleted",
+        description: "The client has been successfully deleted.",
+      });
       // Optionally, you can add a toast notification here
     } catch (error) {
-      console.error('Error deleting client:', error);
-      // Optionally, you can add an error toast notification here
+      toast({
+        title: "Error",
+        description: `Failed to delete the client: ${error.message}`,
+        variant: "destructive",
+      });
+      logerrors(`error: ${error.message}`, error);
+      // Add toast notification for error handling
     }
   };
+
+  return { deleteClientById };
+};
+
+
+const handleDeleteClient = useMutation(api.client.deleteClient);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -42,57 +67,57 @@ export default function AdminDashboard() {
           <MountainIcon className="h-6 w-6" />
           <span>{organization.name}</span>
         </Link>
-        <nav className="flex items-center gap-4">
-          <Link href="#" className="text-sm font-medium hover:underline underline-offset-4">Features</Link>
-          <Link href="#" className="text-sm font-medium hover:underline underline-offset-4">Pricing</Link>
-          <Link href="#" className="text-sm font-medium hover:underline underline-offset-4">About</Link>
-          <Link href="#" className="text-sm font-medium hover:underline underline-offset-4">Contact</Link>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <Avatar className="w-8 h-8">
-                  <AvatarImage src={user.imageUrl} />
-                  <AvatarFallback>{user.firstName?.[0]}{user.lastName?.[0]}</AvatarFallback>
-                </Avatar>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>{user.fullName}</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Logout</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </nav>
       </header>
       <main className="flex-1 grid grid-cols-[280px_1fr] overflow-hidden">
         <div className="bg-muted/40 border-r">
-          <div className="flex h-full max-h-screen flex-col gap-2">
-            <div className="flex h-[60px] items-center border-b px-6">
-              <Link href="#" className="flex items-center gap-2 font-semibold">
-                <MountainIcon className="h-6 w-6" />
-                <span className="">{organization.name}</span>
+          <nav className="flex items-center gap-4">
+            <Link href="#" className="text-sm font-medium hover:underline underline-offset-4">Features</Link>
+            <Link href="#" className="text-sm font-medium hover:underline underline-offset-4">Pricing</Link>
+            <Link href="#" className="text-sm font-medium hover:underline underline-offset-4">About</Link>
+            <Link href="#" className="text-sm font-medium hover:underline underline-offset-4">Contact</Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <Avatar className="w-8 h-8">
+                    <AvatarImage src={user.imageUrl} />
+                    <AvatarFallback>{user.firstName?.[0]}{user.lastName?.[0]}</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>{user.fullName}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem>Logout</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </nav>
+        </div>
+        <div className="flex h-full max-h-screen flex-col gap-2">
+          <div className="flex h-[60px] items-center border-b px-6">
+            <Link href="#" className="flex items-center gap-2 font-semibold">
+              <MountainIcon className="h-6 w-6" />
+              <span className="">{organization.name}</span>
+            </Link>
+            <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
+              <BellIcon className="h-4 w-4" />
+              <span className="sr-only">Toggle notifications</span>
+            </Button>
+          </div>
+          <div className="flex-1 overflow-auto py-2">
+            <nav className="grid items-start px-4 text-sm font-medium">
+              <Link href="#" className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary">
+                <HomeIcon className="h-4 w-4" />
+                Dashboard
               </Link>
-              <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
-                <BellIcon className="h-4 w-4" />
-                <span className="sr-only">Toggle notifications</span>
-              </Button>
-            </div>
-            <div className="flex-1 overflow-auto py-2">
-              <nav className="grid items-start px-4 text-sm font-medium">
-                <Link href="#" className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary">
-                  <HomeIcon className="h-4 w-4" />
-                  Dashboard
-                </Link>
-                <Link href="#" className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary">
-                  <BriefcaseIcon className="h-4 w-4" />
-                  Clients
-                  <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">{clients?.length || 0}</Badge>
-                </Link>
-                {/* Add more navigation items here */}
-              </nav>
-            </div>
+              <Link href="#" className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary">
+                <BriefcaseIcon className="h-4 w-4" />
+                Clients
+                <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">{clients?.length || 0}</Badge>
+              </Link>
+              {/* Add more navigation items here */}
+            </nav>
           </div>
         </div>
         <div className="flex flex-col">
@@ -118,7 +143,7 @@ export default function AdminDashboard() {
                   <Button>Add Client</Button>
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                  {clients?.map((client) => (
+                  {clients?.map((client: Client) => (
                     <Card key={client._id}>
                       <CardContent className="grid gap-2">
                         <div className="flex items-center gap-2">
@@ -138,7 +163,7 @@ export default function AdminDashboard() {
                               <FilePenIcon className="h-4 w-4" />
                               <span className="sr-only">Edit</span>
                             </Button>
-                            <Button variant="outline" size="icon" onClick={() => handleDeleteClient(client._id)}>
+                            <Button variant="outline" size="icon" onClick={() => handleDeleteClient(client)}>
                               <TrashIcon className="h-4 w-4" />
                               <span className="sr-only">Delete</span>
                             </Button>
@@ -192,5 +217,9 @@ export default function AdminDashboard() {
         </div>
       </main>
     </div>
-  );
+  )
+}
+
+function logerrors(arg0: string, error: unknown) {
+  throw new Error('Function not implemented.');
 }
