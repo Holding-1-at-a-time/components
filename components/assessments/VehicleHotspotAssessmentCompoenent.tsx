@@ -1,14 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useEffect, useState } from "react";
+import { Id } from '../../convex/_generated/dataModel';
 
+type Key = string | number | symbol;
+type Value = string | number | object | null | undefined;
+
+type KeyMap = Record<Key, Value>;
 interface VehiclePart {
+  [x: string]: Key | null | undefined;
   name: string;
   x: number;
   y: number;
-}
+};
 
 interface Hotspot {
   part: string;
@@ -33,7 +40,7 @@ const vehicleParts: VehiclePart[] = [
   // Add more parts as needed
 ];
 
-export default function VehicleHotspotAssessment({ onAssessment }: VehicleHotspotAssessmentProps) {
+export default function VehicleHotspotAssessment({ onAssessment }: Readonly<VehicleHotspotAssessmentProps>) {
   const [activeHotspot, setActiveHotspot] = useState<VehiclePart | null>(null);
   const [assessment, setAssessment] = useState<Hotspot[]>([]);
 
@@ -58,12 +65,11 @@ export default function VehicleHotspotAssessment({ onAssessment }: VehicleHotspo
       <div className="relative w-full aspect-[16/9] rounded-lg overflow-hidden shadow-lg bg-gray-200">
         <img src="/vehicle-outline.svg" alt="Vehicle Diagram" className="w-full h-full object-contain" />
         {vehicleParts.map((part, index) => (
-          <Popover key={index}>
+          <Popover key={part.name}>
             <PopoverTrigger asChild>
               <button
-                className={`absolute w-6 h-6 rounded-full ${
-                  assessment.some(h => h.part === part.name) ? 'bg-red-500' : 'bg-blue-500'
-                } hover:bg-opacity-80 transition-colors`}
+                className={`absolute w-6 h-6 rounded-full ${assessment.some(h => h.part === part.name) ? 'bg-red-500' : 'bg-blue-500'
+                  } hover:bg-opacity-80 transition-colors`}
                 style={{ left: `${part.x}%`, top: `${part.y}%` }}
                 onClick={() => handleHotspotClick(part)}
               />
@@ -75,7 +81,7 @@ export default function VehicleHotspotAssessment({ onAssessment }: VehicleHotspo
                   id="issue"
                   placeholder="Describe the issue"
                   defaultValue={assessment.find(h => h.part === part.name)?.issue || ''}
-                  onKeyPress={(e) => {
+                  onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       handleIssueSubmit((e.target as HTMLInputElement).value);
                     }
@@ -99,6 +105,6 @@ export default function VehicleHotspotAssessment({ onAssessment }: VehicleHotspo
           ))}
         </ul>
       </div>
-    </div>
+    </div >
   );
 }
