@@ -1,7 +1,7 @@
-// components/navigation/MainNavigationComponent.tsx
-import React from 'react';
-import Link from 'next/link';
-import { UserIcon, HomeIcon, SettingsIcon, LogoutIcon, NotificationIcon } from '@/public/Icons';
+// components/navigation/MainNavigation.tsx
+import React from "react";
+import Link from "next/link";
+import { UserIcon, HomeIcon, SettingsIcon, LogoutIcon, NotificationIcon } from "../Icons";
 
 /**
  * Renders the main navigation component with links to different pages and icons for notifications, user profile, and logout.

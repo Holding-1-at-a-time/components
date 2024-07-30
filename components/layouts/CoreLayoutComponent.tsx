@@ -1,6 +1,6 @@
 // components/layouts/CoreLayout.tsx
-import React from 'react';
-import { MainNavigation } from '@/components/navigation/MainNavigationComponent';
+import React from "react";
+import { MainNavigation } from "../navigation/MainNavigationComponent";
 
 interface CoreLayoutProps {
   children: React.ReactNode;

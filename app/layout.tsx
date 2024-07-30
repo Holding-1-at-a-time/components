@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
-import "./globals.css";
-import ConvexClerkProvider from "@/Providers/ConvexClerkProvider";
+import ConvexClerkProvider from "../providers/ConvexClerkProvider";
 
 const manrope = Manrope({ subsets: ["latin"] });
 
@@ -17,11 +16,11 @@ export default function RootLayout({
 }>) {
   return (
     <ConvexClerkProvider>
-      <html lang="en">
+        <html lang="en">
           <body className={`${manrope.className}`}>
               {children}
           </body>
-      </html>
+        </html>
     </ConvexClerkProvider>
   );
 }

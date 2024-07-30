@@ -1,5 +1,5 @@
 // components/icons.tsx
-import React from 'react';
+import React from "react";
 
 
 export const LogoutIcon = (props: React.SVGProps<SVGSVGElement>) => (

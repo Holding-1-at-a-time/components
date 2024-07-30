@@ -1,9 +1,8 @@
-// components/navigation/NavigationBarComponent.tsx
-import React from 'react';
-import Link from 'next/link';
-import { UserButton, useUser } from '@clerk/nextjs';
-import HomeIcon from '/public/icons/home.svg';
-import SettingsIcon from '/public/icons/settings.svg';
+import React from "react";
+import Link from "next/link";
+import { UserButton, useUser } from "@clerk/nextjs";
+import HomeIcon from "/public/icons/home.svg";
+import SettingsIcon from "/public/icons/settings.svg";
 
 /**
  * Renders a navigation bar component.
@@ -17,19 +16,19 @@ import SettingsIcon from '/public/icons/settings.svg';
  * The component uses the Clerk `useUser` hook to determine if the user is
  * signed in or not. The hook returns an object with the following properties:
  *
- *   - `isLoaded`: A boolean indicating whether the user's sign-in status has
+ *   - `isLoaded`: A boolean indicating whether the user"s sign-in status has
  *     been loaded.
  *   - `isSignedIn`: A boolean indicating whether the user is signed in or not.
- *   - `user`: The user's profile information if the user is signed in.
+ *   - `user`: The user"s profile information if the user is signed in.
  *
  * @return {ReactElement} The navigation bar component.
  */
 const NavigationBar: React.FC = () => {
   const { isLoaded, isSignedIn, user } = useUser();
 
-  console.log("isLoaded:", isLoaded);
-  console.log("isSignedIn:", isSignedIn);
-  console.log("user:", user);
+  const isLoadedLog = `isLoaded: ${isLoaded}`;
+  const isSignedInLog = `isSignedIn: ${isSignedIn}`;
+  const userLog = `user: ${JSON.stringify(user)}`;
 
   return (
     <nav className="flex items-center justify-between p-4 bg-gradient-to-r from-primary to-primary-light shadow-lg">
