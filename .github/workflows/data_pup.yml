@@ -1,0 +1,52 @@
+name: Datadog Static Analysis
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-visibility:
+    name: Configure Datadog Test Visibility
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Configure Datadog Test Visibility
+        uses: DataDog/test-visibility-github-action@v1.0.5
+        with:
+          languages: Typescript
+          service-name: my-app
+          api-key: ${{ secrets.DD_API_KEY }}
+          site: us5.datadoghq.com
+
+  static-analysis:
+    name: Datadog Static Analyzer
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Check code meets quality and security standards
+        uses: DataDog/datadog-static-analyzer-github-action@v1
+        with:
+          dd_api_key: ${{ secrets.DD_API_KEY }}
+          dd_app_key: ${{ secrets.DD_APP_KEY }}
+          dd_service: my-app
+          dd_env: ci
+          dd_site: us5.datadoghq.com
+          cpu_count: 2
+
+  software-composition-analysis:
+    name: Datadog SBOM Generation and Upload
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Check imported libraries are secure and compliant
+        uses: DataDog/datadog-sca-github-action@main
+        with:
+          dd_api_key: ${{ secrets.DD_API_KEY }}
+          dd_app_key: ${{ secrets.DD_APP_KEY }}
+          dd_service: my-app
+          dd_env: ci
+          dd_site: us5.datadoghq.com
