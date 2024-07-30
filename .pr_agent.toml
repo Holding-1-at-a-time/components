@@ -1,0 +1,34 @@
+[pr_reviewer]
+extra_instructions="""\
+In the `possible issues` section, emphasize the following:
+- Is the code logic efficient?
+-
+"""
+num_code_suggestions="8"
+inline_code_comments=true
+require_score_review=true
+require_can_be_split_review=true
+
+[pr_description]
+extra_instructions="""\
+For the title, use the format [type]: [summary]
+"""
+publish_labels=true
+publish_description_as_comment=true
+generate_ai_title=true
+use_description_markers=true
+final_update_message=true
+
+[pr_code_suggestions]
+num_code_suggestions_per_chunk="10"
+commitable_code_suggestions=true
+suggestions_score_threshold="8"
+
+[pr_update_changelog]
+push_changelog_changes=true
+
+[pr_add_docs]
+docs_style="Typescript"
+
+[pr_custom_prompt]
+prompt= 1) Strongly typed WITHOUT using 'any' type. 2)Check for bugs, null pointers, while making the code faster and more efficient. 3) Use best practices in error handling and security. 4) Lastly clean up the code while strictly keeping the code original function and styles respectively.
