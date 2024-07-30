@@ -1,6 +1,20 @@
-import winston from 'winston';
+import winston, { loggers } from 'winston';
 import { Loggly } from 'winston-loggly-bulk';
 
+// server.ts
+import "./tracer";
+
+import pino from 'pino';
+
+export const logger = pino({
+  level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
+  transport: {
+    target: 'pino-pretty',
+    options: {
+      colorize: true,
+    },
+  },
+});
 const logger = winston.createLogger({
   transports: [
     new Loggly({
@@ -11,9 +25,10 @@ const logger = winston.createLogger({
     })
   ]
 });
+export default loggers; {
+  logger.info("Hello World from Node.js!");
 
-logger.info("Hello World from Node.js!");
-
-logger.debug("This is a debug message");
-logger.warn("This is a warning message");
-logger.error("This is an error message");
+  logger.debug("This is a debug message");
+  logger.warn("This is a warning message");
+  logger.error("This is an error message");
+}

@@ -12,7 +12,6 @@ import { toast } from '@/components/ui/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import VehicleForm from '@/components/assessments/VehicleAssessmentForm';
 import Spinner from '@/components/SpinnerComponent';
-import { usePermissions } from '@/hooks/usePermissions';
 import { FilePenIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 

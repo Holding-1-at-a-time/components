@@ -86,3 +86,6 @@ codiumai.config.ts.map
 codium.json
 codium.config.js
 codium.config.ts
+
+# sonar
+sonar-project.properties

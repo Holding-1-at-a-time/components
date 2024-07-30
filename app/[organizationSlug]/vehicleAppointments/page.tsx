@@ -9,8 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
-import { Spinner } from '@/components/ui/spinner';
-import { VehicleForm } from '@/components/VehicleForm';
+import { Spinner } from '@/components/SpinnerComponent';
+import { VehicleForm } from '@/components/VehicleFormComponent';
 import { AppointmentForm } from '@/components/AppointmentForm';
 
 export default function VehicleAppointmentManagement() {

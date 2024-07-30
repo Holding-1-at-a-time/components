@@ -7,8 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/SpinnerComponent";
 import { toast } from "@/components/ui/use-toast";
-import { usePermissions } from '@/hooks/usePermissions';
-import { VehicleDetails, Service, Customization, UploadedFile } from '@/types';
+import { fileUpload } from '@/lib/fileUpload';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Console } from 'winston/lib/winston/transports';
 
@@ -52,7 +51,7 @@ interface AIEstimationProps {
   vehicleDetails: VehicleDetails;
   selectedServices: Service[];
   customizations: Customization[];
-  uploadedFiles: UploadedFile[];
+  uploadedFiles: fileUpload[];
 }
 
 interface AIAnalysis {
@@ -185,7 +184,7 @@ export function aiEstimation({ vehicleDetails, selectedServices, customizations,
       </CardContent>
       <CardFooter>
         <Button onClick={generateAIAnalysis} disabled={isAnalyzing}>
-          {isAnalyzing ? <Spinner className='hover:bg-green-500 to-true-gray-500'/>}
+          {isAnalyzing ? <Spinner className='hover:bg-green-500 to-true-gray-500' />}
           {isAnalyzing ? 'Analyzing...' : 'Generate AI Analysis'}
         </Button>
       </CardFooter>
