@@ -216,3 +216,80 @@ export default function SelfAssessmentPage() {
 function useState<T>(arg0: null): [any, any] {
   throw new Error('Function not implemented.');
 }
+<<<<<<< HEAD
+=======
+
+      const result = await createSelfAssessment({
+        organizationId: organization.id as Id<"organization">,
+        userId: user.id as Id<"user">,
+        vehicleDetails: {
+          make: data.make,
+          model: data.model,
+          year: data.year,
+          condition: data.condition,
+          vin: data.vin,
+        },
+        selectedServices: data.selectedServices.map(id => id as Id<"services">),
+        customizations: data.customizations,
+        images: data.images.map(img => img.url),
+        videos: data.videos.map(video => video.url),
+        hotspotAssessment: data.hotspotAssessment,
+      });
+
+      toast({ title: t('success'), description: t('assessmentSubmitted') });
+      trackEvent('SelfAssessmentSubmitted', { organizationId: organization.id });
+      router.push(`/${organization.slug}/assessments/${result}`);
+    } catch (error) {
+      logger.error('Error submitting self-assessment:', { error, userId: user.id, organizationId: organization.id });
+      toast({ title: t('error'), description: t('submissionFailed'), variant: 'destructive' });
+    }
+  };
+
+  const handleStepChange = (newStep: Step) => {
+    setCurrentStep(newStep);
+    trackEvent('SelfAssessmentStepChanged', { step: newStep });
+  };
+
+  const stepComponents: Record<Step, React.ReactNode> = {
+    vehicleInfo: <VINScanner />,
+    condition: <VehicleConditionAssessment />,
+    services: <ServiceSelection />,
+    customizations: <CustomizationSelection />,
+    upload: <FileUpload />,
+    aiEstimation: selfAssessmentId ? <AIEstimation selfAssessmentId={selfAssessmentId} /> : null,
+    review: <ReviewStep onSubmit={handleSubmit(onSubmit)} />,
+  };
+
+  return (
+    <ErrorBoundary fallback={<div role="alert">{t('errorOccurred')}</div>}>
+
+      <FormProvider {...methods}>
+        <Card className="max-w-2xl mx-auto">
+          <CardHeader>
+            <CardTitle>{t('vehicleSelfAssessment')}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ProgressIndicator currentStep={STEPS.indexOf(currentStep)} totalSteps={STEPS.length} />
+            {stepComponents[currentStep]}
+            <div className="mt-4 flex justify-between">
+              {currentStep !== 'vehicleDetails' && (
+                <Button onClick={() => handleStepChange(STEPS[STEPS.indexOf(currentStep) - 1] as Step)}>
+                  {t('previous')}
+                </Button>
+              )}
+              {currentStep !== 'review' && (
+                <Button 
+                  onClick={() => handleStepChange(STEPS[STEPS.indexOf(currentStep) + 1] as Step)}
+                  disabled={!isValid}
+                >
+                  {t('next')}
+                </Button>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </FormProvider>
+    </ErrorBoundary>
+  );
+}
+>>>>>>> 8e85f4c80e9ad37ef7c9ac9d4e86c2f7c25bfbc8
