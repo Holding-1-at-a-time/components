@@ -1,8 +1,7 @@
-import React from "react";
-import Link from "next/link";
 import { UserButton, useUser } from "@clerk/nextjs";
-import HomeIcon from "/public/icons/home.svg";
-import SettingsIcon from "/public/icons/settings.svg";
+import { HomeIcon, SettingsIcon } from "lucide-react";
+import Link from "next/link";
+import React from "react";
 
 /**
  * Renders a navigation bar component.
@@ -25,11 +24,6 @@ import SettingsIcon from "/public/icons/settings.svg";
  */
 const NavigationBar: React.FC = () => {
   const { isLoaded, isSignedIn, user } = useUser();
-
-  const isLoadedLog = `isLoaded: ${isLoaded}`;
-  const isSignedInLog = `isSignedIn: ${isSignedIn}`;
-  const userLog = `user: ${JSON.stringify(user)}`;
-
   return (
     <nav className="flex items-center justify-between p-4 bg-gradient-to-r from-primary to-primary-light shadow-lg">
       <div className="flex items-center space-x-4">
