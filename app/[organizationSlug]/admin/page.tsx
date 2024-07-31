@@ -12,8 +12,6 @@ import { Id } from '@/convex/_generated/dataModel';
 import { useOrganization, useUser } from '@clerk/nextjs';
 import { useMutation, useQuery } from 'convex/react';
 import Link from "next/link";
-import { stderr } from 'process';
-import { loggers } from 'winston';
 
 interface Client {
   _id: string;
@@ -27,12 +25,10 @@ export default function AdminDashboard() {
   const { user } = useUser();
   const clients = useQuery(api.client.list, organization?.id ? { orgId: organization.id } : 'skip');
   const invoices = useQuery(api.invoices.list, organization?.id ? { orgId: organization.id } : 'skip');
-  const deleteClient = useMutation(api.client.deleteClient);
 
   if (!organization || !user) {
     return <div>Loading...</div>;
   }
-const useCustomMutation = () => {
   const handleDeleteClient = useMutation(api.client.deleteClient);
 
   const deleteClientById = async (clientId: Id<"clients">) => {
