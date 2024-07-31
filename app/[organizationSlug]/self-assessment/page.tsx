@@ -1,4 +1,4 @@
-// app/[organizationSlug]/self-assessment/page.tsx
+"use client";
 
 import React, { useState } from 'react';
 import { useOrganization } from '@clerk/nextjs';
@@ -26,6 +26,7 @@ import { useUnsavedChangesWarning } from '@/hooks/useUnsavedChangesWarning';
 import { Id } from '@/convex/_generated/dataModel';
 
 const STEPS = ['vehicleInfo', 'condition', 'services', 'customizations', 'upload', 'aiEstimation', 'review'] as const;
+
 type Step = typeof STEPS[number];
 
 export default function SelfAssessmentPage() {
@@ -39,41 +40,74 @@ export default function SelfAssessmentPage() {
   const methods = useForm<SelfAssessmentFormData>({
     resolver: zodResolver(selfAssessmentSchema),
     defaultValues: {
-      vehicleInfo: {},
-      condition: {},
+      condition: 'Good',
+      hotspotAssessment: [],
       selectedServices: [],
       customizations: [],
-      uploadedFiles: [],
+      images: [],
+      videos: [],
     },
   });
 
-  const { handleSubmit, watch, formState: { isDirty, isValid } } = methods;
+  function Profile() {
+    const [ordersCount, setOrdersCount] = useState(0);
+    useEffect(function () {
+      if (ordersCount !== 0) {
+        localStorage.setItem('ordersData', ordersCount);
+      }
+    });
+
+    const [name] = useState('John');
+    return <div>{name}</div>
+  }
+
+  const { handleSubmit, setValue, getValues, formState: { isDirty, errors } } = methods;
 
   useUnsavedChangesWarning(isDirty);
 
-  const createSelfAssessment = useMutation(api.selfAssessments.create);
-  const updateSelfAssessment = useMutation(api.selfAssessments.update);
+  const { data: services, isLoading, error } = useQuery(api.services.listServices,
+    organization?.id ? { tenantId: organization.id as Id<"organization"> } : 'skip'
+  );
+
+  const createSelfAssessment = useMutation(api.selfAssessments.createSelfAssessment);
+
+  const handleVINScan = useCallback((vinData: any) => {
+    setValue('make', vinData.make, { shouldValidate: true });
+    setValue('model', vinData.model, { shouldValidate: true });
+    setValue('year', vinData.year.toString(), { shouldValidate: true });
+    setValue('vin', vinData.vin, { shouldValidate: true });
+  }, [setValue]);
 
   const onSubmit = async (data: SelfAssessmentFormData) => {
-    if (!organization?.id) {
+    if (!organization?.id || !user?.id) {
       toast({ title: t('error'), description: t('organizationNotFound'), variant: 'destructive' });
       return;
     }
 
     try {
-      let assessmentId: Id<'selfAssessments'>;
-      if (selfAssessmentId) {
-        await updateSelfAssessment({ id: selfAssessmentId, ...data });
-        assessmentId = selfAssessmentId;
-      } else {
-        assessmentId = await createSelfAssessment({ organizationId: organization.id, ...data });
-        setSelfAssessmentId(assessmentId);
-      }
-      
+
+      const result = await createSelfAssessment({
+        organizationId: organization.id as Id<"organization">,
+        userId: user.id as Id<"user">,
+        vehicleDetails: {
+          make: data.make,
+          model: data.model,
+          year: data.year,
+          condition: data.condition,
+          vin: data.vin,
+        },
+        selectedServices: data.selectedServices.map(id => id as Id<"services">),
+        customizations: data.customizations,
+        images: data.images.map(img => img.url),
+        videos: data.videos.map(video => video.url),
+        hotspotAssessment: data.hotspotAssessment,
+      });
+
       toast({ title: t('success'), description: t('assessmentSubmitted') });
       trackEvent('SelfAssessmentSubmitted', { organizationId: organization.id });
-      router.push(`/${organization.slug}/assessments/${assessmentId}`);
+      router.push(`/${organization.slug}/assessments/${result}`);
     } catch (error) {
+      logger.error('Error submitting self-assessment:', { error, userId: user.id, organizationId: organization.id });
       toast({ title: t('error'), description: t('submissionFailed'), variant: 'destructive' });
     }
   };
@@ -95,6 +129,7 @@ export default function SelfAssessmentPage() {
 
   return (
     <ErrorBoundary fallback={<div role="alert">{t('errorOccurred')}</div>}>
+
       <FormProvider {...methods}>
         <Card className="max-w-2xl mx-auto">
           <CardHeader>
@@ -104,7 +139,7 @@ export default function SelfAssessmentPage() {
             <ProgressIndicator currentStep={STEPS.indexOf(currentStep)} totalSteps={STEPS.length} />
             {stepComponents[currentStep]}
             <div className="mt-4 flex justify-between">
-              {currentStep !== 'vehicleInfo' && (
+              {currentStep !== 'vehicleDetails' && (
                 <Button onClick={() => handleStepChange(STEPS[STEPS.indexOf(currentStep) - 1] as Step)}>
                   {t('previous')}
                 </Button>
@@ -122,19 +157,5 @@ export default function SelfAssessmentPage() {
         </Card>
       </FormProvider>
     </ErrorBoundary>
-  );
-}
-
-function ReviewStep({ onSubmit }: { onSubmit: () => void }) {
-  const t = useTranslations('SelfAssessment');
-  const { watch } = useForm();
-  const formData = watch();
-
-  return (
-    <div>
-      <h2>{t('reviewYourAssessment')}</h2>
-      {/* Display summary of form data */}
-      <Button onClick={onSubmit}>{t('submitAssessment')}</Button>
-    </div>
   );
 }
