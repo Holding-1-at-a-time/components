@@ -13,6 +13,8 @@
     "isolatedModules": true,
     "jsx": "preserve", // Preserving JSX is common for Next.js projects
     "incremental": true,
+    "sourceMap": true,
+    "baseUrl": "./",
     "plugins": [
       { "name": "next" } // Ensure your Next.js plugin is correctly configured
     ],

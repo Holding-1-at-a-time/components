@@ -24,7 +24,7 @@ interface VehicleHotspotAssessmentProps {
 }
 
 export default function VehicleHotspotAssessment({ onAssessment }: VehicleHotspotAssessmentProps) {
-  const vehicleParts = useQuery(api.vehicleParts.list) || [];
+  const vehicleParts = useQuery(api.vehicles.list) || [];
   const [activeHotspot, setActiveHotspot] = useState<VehiclePart | null>(null);
   const [assessment, setAssessment] = useState<Hotspot[]>([]);
 
