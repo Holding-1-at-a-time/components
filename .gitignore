@@ -86,6 +86,9 @@ codiumai.config.ts.map
 codium.json
 codium.config.js
 codium.config.ts
+<<<<<<< HEAD
+=======
 
 # sonar
 sonar-project.properties
+>>>>>>> c51587409a955418810f61cf695203e9470b93e5

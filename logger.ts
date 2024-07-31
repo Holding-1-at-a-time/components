@@ -3,13 +3,9 @@ import { pino } from 'pino';
 import { Logger } from 'winston';
 import { loggers } from 'winston';
 
-});
-export default loggers; {
+export default logger; {
   logger.info("Hello World from Node.js!");
-
-/**
- * The Loggly logger instance.
- */
+  
 export const logglyLogger = new loggers.Loggly({
 export const logglyLogger = new Loggly({
 const { loggers = new Loggly({

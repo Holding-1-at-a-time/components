@@ -1,6 +1,10 @@
 {
     "cSpell.words": [
         "Analisyst",
+<<<<<<< HEAD
+        "nextjs"
+    ]
+=======
         "backgroundone",
         "Hotspot",
         "lucide",
@@ -11,4 +15,5 @@
         "connectionId": "holding-1-at-a-time",
         "projectKey": "Holding-1-at-a-time_components"
     }
+>>>>>>> c51587409a955418810f61cf695203e9470b93e5
 }

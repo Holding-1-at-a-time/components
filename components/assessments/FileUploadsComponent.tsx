@@ -1,17 +1,82 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useMutation } from 'convex/react';
+import { api } from '../../convex/_generated/api';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { Progress } from '@/components/ui/progress';
 
-/**
- * Renders a component for uploading images and videos.
- *
- * @return {JSX.Element} The rendered component.
- */
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/quicktime'];
+
 const FileUploads: React.FC = () => {
-    const { register, watch } = useFormContext();
-    const images = watch('images');
-    const videos = watch('videos');
+    const { setValue } = useFormContext();
+    const [uploadProgress, setUploadProgress] = useState<number>(0);
+    const [uploadError, setUploadError] = useState<string | null>(null);
+
+    const generateUploadUrl = useMutation(api.files.generateUploadUrl);
+    const saveFile = useMutation(api.files.saveFile);
+
+    const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>, fileType: 'images' | 'videos') => {
+        const files = event.target.files;
+        if (!files) return;
+
+        setUploadError(null);
+        setUploadProgress(0);
+
+        const uploadedFiles = [];
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            
+            // Validate file size and type
+            if (file.size > MAX_FILE_SIZE) {
+                setUploadError(`File ${file.name} is too large. Max size is 10MB.`);
+                continue;
+            }
+
+            const allowedTypes = fileType === 'images' ? ALLOWED_IMAGE_TYPES : ALLOWED_VIDEO_TYPES;
+            if (!allowedTypes.includes(file.type)) {
+                setUploadError(`File ${file.name} has an unsupported format.`);
+                continue;
+            }
+
+            try {
+                // Get a short-lived upload URL
+                const uploadUrl = await generateUploadUrl();
+
+                // Upload the file to the URL
+                const result = await fetch(uploadUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": file.type },
+                    body: file,
+                });
+
+                if (!result.ok) {
+                    throw new Error(`Upload failed with status ${result.status}`);
+                }
+
+                // Save the file in Convex
+                const fileId = await saveFile({ 
+                    storageId: result.headers.get("storageId")!,
+                    fileName: file.name,
+                    fileType: file.type
+                });
+
+                uploadedFiles.push(fileId);
+
+                // Update progress
+                setUploadProgress((prevProgress) => prevProgress + (100 / files.length));
+            } catch (error) {
+                console.error('Upload error:', error);
+                setUploadError(`Failed to upload ${file.name}. Please try again.`);
+            }
+        }
+
+        // Update form value with uploaded file IDs
+        setValue(fileType, uploadedFiles);
+    };
 
     return (
         <div className="grid gap-4 rotate-in">
@@ -30,9 +95,9 @@ const FileUploads: React.FC = () => {
                 <input
                     id="image-upload"
                     type="file"
-                    accept="image/*"
+                    accept={ALLOWED_IMAGE_TYPES.join(',')}
                     multiple
-                    {...register('images')}
+                    onChange={(e) => handleFileUpload(e, 'images')}
                     className="hidden"
                 />
                 <Button
@@ -45,16 +110,18 @@ const FileUploads: React.FC = () => {
                 <input
                     id="video-upload"
                     type="file"
-                    accept="video/*"
+                    accept={ALLOWED_VIDEO_TYPES.join(',')}
                     multiple
-                    {...register('videos')}
+                    onChange={(e) => handleFileUpload(e, 'videos')}
                     className="hidden"
                 />
             </div>
-            <div className="text-foreground">
-                <p>Images: {images?.length || 0} uploaded</p>
-                <p>Videos: {videos?.length || 0} uploaded</p>
-            </div>
+            {uploadProgress > 0 && uploadProgress < 100 && (
+                <Progress value={uploadProgress} className="w-full" />
+            )}
+            {uploadError && (
+                <p className="text-destructive">{uploadError}</p>
+            )}
         </div>
     );
 };

@@ -1,4 +1,6 @@
 import { z } from 'zod';
+<<<<<<< HEAD
+=======
 import { Id } from '@/convex/_generated/dataModel';
 
 export const selfAssessmentSchema = z.object({
@@ -27,6 +29,7 @@ export const selfAssessmentSchema = z.object({
 });
 
 export type SelfAssessmentFormData = z.infer<typeof selfAssessmentSchema>;
+>>>>>>> c51587409a955418810f61cf695203e9470b93e5
 
 export const vehicleSchema = z.object({
   make: z.string().min(1, "Make is required"),
