@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // app/[organizationSlug]/self-assessment/page.tsx
 
 import React from 'react';
@@ -77,96 +76,10 @@ export default function SelfAssessmentPage() {
   const onSubmit = async (data: SelfAssessmentFormData) => {
     if (!organization) {
       toast({ title: 'Error', description: 'Organization not found', variant: 'destructive' });
-=======
-"use client";
-
-import { ServiceSelection } from '@/components/assessments/ServiceSelectionComponent';
-import { VehicleHotspotAssessment } from '@/components/assessments/VehicleHotspotAssessmentComponent';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { FileUploads } from '!/lib/fileUpload';
-import { Progress } from 'components\ui\progress';
-import { ReviewStep } from '@/components/ReviewStep';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Spinner } from '@/components/SpinnerComponent';
-import { toast } from '@/components/ui/use-toast';
-import { VINScanner } from '@/components/VINScanner';
-import { api } from '@/convex/_generated/api';
-import { Id } from '@/convex/_generated/dataModel';
-import { useAnalytics } from '@/hooks/useAnalytics';
-import { useUnsavedChangesWarning } from '@/hooks/useUnsavedChangesWarning';
-import { logger } from '@/logger';
-import { VehicleInfo } from '@/types/vehicleInfo';
-import { useOrganization, useUser } from '@clerk/nextjs';
-import { zodResolver } from '@hookform/resolvers/resolvers/zod';
-import { useConvex, useMutation, useQuery } from 'convex/react';
-import { useRouter } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
-
-
-const STEPS = ['vehicleDetails', 'conditionAssessment', 'serviceSelection', 'fileUpload', 'review'] as const;
-type Step = typeof STEPS[number];
-
-export default function SelfAssessmentPage() {
-  const { organization } = useOrganization();
-  const { user } = useUser();
-  const t = useTranslations('SelfAssessment');
-  const router = useRouter();
-  const convex = useConvex();
-  const { trackEvent } = useAnalytics();
-  const [currentStep, setCurrentStep] = useState<Step>('vehicleDetails');
-
-  const methods = useForm<SelfAssessmentFormData>({
-    resolver: zodResolver(selfAssessmentSchema),
-    defaultValues: {
-      condition: 'Good',
-      hotspotAssessment: [],
-      selectedServices: [],
-      customizations: [],
-      images: [],
-      videos: [],
-    },
-  });
-
-  function Profile() {
-    const [ordersCount, setOrdersCount] = useState(0);
-    useEffect(function () {
-      if (ordersCount !== 0) {
-        localStorage.setItem('ordersData', ordersCount);
-      }
-    });
-
-    const [name] = useState('John');
-    return <div>{name}</div>
-  }
-
-  const { handleSubmit, setValue, getValues, formState: { isDirty, errors } } = methods;
-
-  useUnsavedChangesWarning(isDirty);
-
-  const { data: services, isLoading, error } = useQuery(api.services.listServices,
-    organization?.id ? { tenantId: organization.id as Id<"organization"> } : 'skip'
-  );
-
-  const createSelfAssessment = useMutation(api.selfAssessments.createSelfAssessment);
-
-  const handleVINScan = useCallback((vinData: any) => {
-    setValue('make', vinData.make, { shouldValidate: true });
-    setValue('model', vinData.model, { shouldValidate: true });
-    setValue('year', vinData.year.toString(), { shouldValidate: true });
-    setValue('vin', vinData.vin, { shouldValidate: true });
-  }, [setValue]);
-
-  const onSubmit = async (data: SelfAssessmentFormData) => {
-    if (!organization?.id || !user?.id) {
-      toast({ title: t('error'), description: t('organizationNotFound'), variant: 'destructive' });
->>>>>>> c51587409a955418810f61cf695203e9470b93e5
       return;
     }
 
     try {
-<<<<<<< HEAD
       const yearInteger = parseInt(data.year, 10);
       const result = await createSelfAssessment({
         tenantId: organization.id as Id<"organization">,
@@ -306,7 +219,7 @@ export default function SelfAssessmentPage() {
 function useState<T>(arg0: null): [any, any] {
   throw new Error('Function not implemented.');
 }
-=======
+
       const result = await createSelfAssessment({
         organizationId: organization.id as Id<"organization">,
         userId: user.id as Id<"user">,
@@ -333,59 +246,24 @@ function useState<T>(arg0: null): [any, any] {
     }
   };
 
+  const handleStepChange = (newStep: Step) => {
+    setCurrentStep(newStep);
+    trackEvent('SelfAssessmentStepChanged', { step: newStep });
+  };
 
-  const handleVINDecoded = useCallback((vehicleInfo: VehicleInfo) => {
-    setValue('vehicleInfo', vehicleInfo, { shouldValidate: true });
-
-    const validateStep = useCallback((step: Step): boolean => {
-      const stepFields = {
-        vehicleDetails: ['make', 'model', 'year', 'vin'],
-        conditionAssessment: ['condition', 'hotspotAssessment'],
-        serviceSelection: ['selectedServices'],
-        fileUpload: ['images', 'videos'],
-        review: [],
-      };
-
-      return stepFields[step].every(field => !errors[field]);
-    }, [errors]);
-
-    const handleStepChange = useCallback((newStep: Step) => {
-      if (validateStep(currentStep)) {
-        setCurrentStep(newStep);
-        trackEvent('SelfAssessmentStepChanged', { step: newStep });
-      } else {
-        toast({ title: t('error'), description: t('pleaseFixErrors'), variant: 'destructive' });
-      }
-    }, [currentStep, validateStep, trackEvent, t]);
-
-    useEffect(() => {
-      if (!organization?.id) {
-        router.push('/organization-selection');
-      }
-    }, [organization, router]);
-
-    if (isLoading) return <Spinner aria-label={t('loading')} />;
-    if (error) return <div role="alert">{t('errorLoadingServices', { error: error.message })}</div>;
-    if (!services?.length) return <div role="alert">{t('noServicesFound')}</div>;
-
-    const stepComponents: Record<Step, React.ReactNode> = {
-      vehicleDetails: <VINScanner onScan={handleVINScan} />,
-      conditionAssessment: <VehicleHotspotAssessment onAssessment={(assessment) => setValue('hotspotAssessment', assessment, { shouldValidate: true })} />,
-      serviceSelection: <ServiceSelection services={services} />,
-      fileUpload: <FileUploads />,
-      review: <ReviewStep onEdit={() => handleStepChange('vehicleDetails')} onSubmit={handleSubmit(onSubmit)} />,
-    };
-    // Get recommended services based on vehicle info
-    const recommendedServices = EstimationService.getRecommendedServices(vehicleInfo);
-    setValue('recommendedServices', recommendedServices, { shouldValidate: true });
-
-    // Calculate initial estimate
-    const initialEstimate = EstimationService.calculateBasePrice(vehicleInfo, recommendedServices);
-    setValue('initialEstimate', initialEstimate, { shouldValidate: true });
-  }, [setValue]);
+  const stepComponents: Record<Step, React.ReactNode> = {
+    vehicleInfo: <VINScanner />,
+    condition: <VehicleConditionAssessment />,
+    services: <ServiceSelection />,
+    customizations: <CustomizationSelection />,
+    upload: <FileUpload />,
+    aiEstimation: selfAssessmentId ? <AIEstimation selfAssessmentId={selfAssessmentId} /> : null,
+    review: <ReviewStep onSubmit={handleSubmit(onSubmit)} />,
+  };
 
   return (
-    <ErrorBoundary>
+    <ErrorBoundary fallback={<div role="alert">{t('errorOccurred')}</div>}>
+
       <FormProvider {...methods}>
         <Card className="max-w-2xl mx-auto">
           <CardHeader>
@@ -401,7 +279,10 @@ function useState<T>(arg0: null): [any, any] {
                 </Button>
               )}
               {currentStep !== 'review' && (
-                <Button onClick={() => handleStepChange(STEPS[STEPS.indexOf(currentStep) + 1] as Step)}>
+                <Button 
+                  onClick={() => handleStepChange(STEPS[STEPS.indexOf(currentStep) + 1] as Step)}
+                  disabled={!isValid}
+                >
                   {t('next')}
                 </Button>
               )}
@@ -412,4 +293,3 @@ function useState<T>(arg0: null): [any, any] {
     </ErrorBoundary>
   );
 }
->>>>>>> c51587409a955418810f61cf695203e9470b93e5

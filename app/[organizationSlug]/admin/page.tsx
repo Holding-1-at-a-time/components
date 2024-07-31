@@ -13,7 +13,6 @@ import { useOrganization, useUser } from '@clerk/nextjs';
 import { useMutation, useQuery } from 'convex/react';
 import Link from "next/link";
 
-
 interface Client {
   _id: string;
   name: string;
@@ -26,7 +25,6 @@ export default function AdminDashboard() {
   const { user } = useUser();
   const clients = useQuery(api.client.list, organization?.id ? { orgId: organization.id } : 'skip');
   const invoices = useQuery(api.invoices.list, organization?.id ? { orgId: organization.id } : 'skip');
-  const deleteClient = useMutation(api.client.deleteClient);
 
   if (!organization || !user) {
     return <div>Loading...</div>;
