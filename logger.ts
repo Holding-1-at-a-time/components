@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-import winston from 'winston';
-import { Loggly } from 'winston-loggly-bulk';
-
-=======
 import winston, { loggers } from 'winston';
 import { Loggly } from 'winston-loggly-bulk';
 
@@ -11,7 +6,7 @@ import "./tracer";
 
 import pino from 'pino';
 
-export const logger = pino({
+export const loggly = pino({
   level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
   transport: {
     target: 'pino-pretty',
@@ -20,7 +15,6 @@ export const logger = pino({
     },
   },
 });
->>>>>>> c51587409a955418810f61cf695203e9470b93e5
 const logger = winston.createLogger({
   transports: [
     new Loggly({
@@ -31,19 +25,10 @@ const logger = winston.createLogger({
     })
   ]
 });
-<<<<<<< HEAD
-
-logger.info("Hello World from Node.js!");
-
-logger.debug("This is a debug message");
-logger.warn("This is a warning message");
-logger.error("This is an error message");
-=======
-export default loggers; {
+export default logger; {
   logger.info("Hello World from Node.js!");
 
   logger.debug("This is a debug message");
   logger.warn("This is a warning message");
   logger.error("This is an error message");
 }
->>>>>>> c51587409a955418810f61cf695203e9470b93e5

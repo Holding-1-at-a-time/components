@@ -1,4 +1,3 @@
-// src/components/MainContainer.tsx
 import { useOrganization, UserButton } from '@clerk/nextjs';
 import { useQuery } from 'convex/react';
 import { SearchIcon, Sidebar } from 'lucide-react';
@@ -11,19 +10,14 @@ import { Input } from '../components/ui/input';
 import { api } from '../convex/_generated/api';
 import { Id } from '../convex/_generated/dataModel';
 
-/**
- * Main container component that handles the main application layout.
- * It renders the main header, sidebar, and content sections.
- * It also handles the organization selection and data loading.
- */
 const MainContainer: React.FC = () => {
   // Get the currently selected organization
   const { organization } = useOrganization();
-  const orgId = organization?.id as Id<'organizations'>;
+  const orgId = organization?.id as Id<'organization'>;
 
   // Fetch the list of clients and invoices for the selected organization
-  const clients = useQuery(api.client.list, orgId ? {  organizationId } : 'skip');
-  const invoices = useQuery(api.invoices.list, orgId ? { orgId } : 'skip');
+  const clients = useQuery(api.client.list, orgId ? { search: '', organizationId: orgId } : 'skip');
+  const invoices = useQuery(api.invoices.list, orgId ? { orgId, search: '' } : 'skip'); // Adjusted to match the expected type
 
   // If no organization is selected, display a message
   if (!orgId) {
@@ -35,70 +29,45 @@ const MainContainer: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-  // If there was an error loading the data, display an error message
-  if (clients === null || invoices === null) {
-    return <div>Failed to load data. Please try again.</div>;
-  }
-  <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-  const MainContainer: React.FC = () => {
-    const { organization } = useOrganization();
-    const orgId = organization?.id as Id<'organizations'>;
-
-    const clients = useQuery(api.client.list, orgId ? { organizationId } : 'skip');
-    const invoices = useQuery(api.invoices.list, orgId ? { orgId } : 'skip');
-
-    if (!orgId) {
-      return <div>Please select an organization to continue.</div>;
-    }
-
-    if (clients === undefined || invoices === undefined) {
-      return <div>Loading...</div>;
-    }
-
-    if (clients === null || invoices === null) {
-      return <div>Failed to load data. Please try again.</div>;
-    }
-
-    return (
-      <div className="flex flex-col min-h-screen gradient-bg">
-        <Header />
-        <main className="flex-1 grid grid-cols-[280px_1fr] overflow-hidden">
-          <Sidebar />
-          <div className="flex flex-col">
-            <header className="flex h-14 lg:h-[60px] items-center gap-4 border-b bg-muted/40 px-6">
-              <div className="w-full flex-1">
-                <form>
-                  <div className="relative">
-                    <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input type="search" placeholder="Search" className="w-full bg-background shadow-none appearance-none pl-8 md:w-2/3 lg:w-1/3" />
-                  </div>
-                </form>
-              </div>
-              <UserButton afterSignOutUrl="/" />
-            </header>
-            <main className="flex-1 p-4 md:p-6">
-              <div className="grid gap-8">
-                <div className="grid gap-4">
-                  <div className="flex items-center justify-between">
-                    <h1 className="text-2xl font-semibold">Clients</h1>
-                    <Button>Add Client</Button>
-                  </div>
-                  <ClientList clients={clients} />
+  return (
+    <div className="flex flex-col min-h-screen gradient-bg">
+      <Header />
+      <main className="flex-1 grid grid-cols-[280px_1fr] overflow-hidden">
+        <Sidebar />
+        <div className="flex flex-col">
+          <header className="flex h-14 lg:h-[60px] items-center gap-4 border-b bg-muted/40 px-6">
+            <div className="w-full flex-1">
+              <form>
+                <div className="relative">
+                  <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input type="search" placeholder="Search" className="w-full bg-background shadow-none appearance-none pl-8 md:w-2/3 lg:w-1/3" />
                 </div>
-                <div className="grid gap-4">
-                  <div className="flex items-center justify-between">
-                    <h1 className="text-2xl font-semibold">Invoices</h1>
-                    <Button>Create Invoice</Button>
-                  </div>
-                  <InvoicesTable invoices={invoices} />
+              </form>
+            </div>
+            <UserButton afterSignOutUrl="/" />
+          </header>
+          <main className="flex-1 p-4 md:p-6">
+            <div className="grid gap-8">
+              <div className="grid gap-4">
+                <div className="flex items-center justify-between">
+                  <h1 className="text-2xl font-semibold">Clients</h1>
+                  <Button>Add Client</Button>
                 </div>
+                <ClientList clients={clients} />
               </div>
-            </main>
-          </div>
-        </main>
-      </div>
-    );
-  };
+              <div className="grid gap-4">
+                <div className="flex items-center justify-between">
+                  <h1 className="text-2xl font-semibold">Invoices</h1>
+                  <Button>Create Invoice</Button>
+                </div>
+                <InvoicesTable invoices={invoices} />
+              </div>
+            </div>
+          </main>
+        </div>
+      </main>
+    </div>
+  );
 };
 
-  export default MainContainer
+export default MainContainer;

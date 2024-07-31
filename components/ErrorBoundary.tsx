@@ -1,6 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from "react";
-import { toast } from '@/components/ui/use-toast';
-import { logger } from '@/logger';
+import  logger  from '@/logger';
 
 interface Props {
   children: ReactNode;
