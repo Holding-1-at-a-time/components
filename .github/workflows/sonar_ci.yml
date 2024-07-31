@@ -1,8 +1,10 @@
-name: Build
+name: Sonar_ci
 on:
   push:
     branches:
       - main
+      - feature
+      - dev
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:

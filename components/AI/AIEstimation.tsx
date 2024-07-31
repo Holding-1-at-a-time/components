@@ -7,31 +7,64 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/SpinnerComponent";
 import { toast } from "@/components/ui/use-toast";
-<<<<<<< HEAD
 import { usePermissions } from '@/hooks/usePermissions';
 import { VehicleDetails, Service, Customization, UploadedFile } from '@/types';
-=======
-import { fileUpload } from '@/lib/fileUpload';
->>>>>>> c51587409a955418810f61cf695203e9470b93e5
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Console } from 'winston/lib/winston/transports';
 
 interface AIEstimationProps {
-  selfAssessmentId: string;
+  vehicleDetails: VehicleDetails;
+  selectedServices: Service[];
+  customizations: Customization[];
+  uploadedFiles: UploadedFile[];
 }
 
-export function AIEstimation({ selfAssessmentId }: AIEstimationProps) {
-  const selfAssessment = useQuery(api.selfAssessment.getSelfAssessment, { id: selfAssessmentId });
+interface AIAnalysis {
+  estimatedTotal: number;
+  detailedAnalysis: {
+    vehicleCondition: string;
+    recommendedServices: string[];
+    timeEstimate: string;
+    potentialIssues: string[];
+  };
+}
 
-  if (!selfAssessment) {
-    return <Spinner />;
-  }
+export function aiEstimation({ vehicleDetails, selectedServices, customizations, uploadedFiles }: AIEstimationProps) {
+  const { organization } = useOrganization();
+  const { hasPermission } = usePermissions();
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [aiAnalysis, setAiAnalysis] = useState<AIAnalysis | null>(null);
 
-  const { aiEstimation } = selfAssessment;
+  const getAIAnalysis = useMutation(api.ai.getAnalysis);
+  const cachedAnalysis = useQuery(
+    api.ai.getCachedAnalysis,
+    organization?.id ? {
+      organizationId: organization.id,
+      vehicleId: vehicleDetails.id,
+    } : 'skip'
+  );
 
-  if (!aiEstimation) {
-    return <div>AI estimation not available yet.</div>;
-  }
+  useEffect(() => {
+    if (cachedAnalysis) {
+      setAiAnalysis(cachedAnalysis);
+    } else if (hasPermission('view:ai-estimation')) {
+      setIsAnalyzing(true);
+      getAIAnalysis({
+        vehicleDetails,
+        selectedServices,
+        customizations,
+        uploadedFiles,
+      }).then((analysis) => {
+        setAiAnalysis(analysis);
+        setIsAnalyzing(false);
+      }).catch((error) => {
+        console.error('Error fetching AI analysis:', error);
+        setIsAnalyzing(false);
+      });
+    }
+  }, [cachedAnalysis, getAIAnalysis, hasPermission, organization?.id, vehicleDetails, selectedServices, customizations, uploadedFiles]);
+
+  return aiAnalysis?.estimatedTotal;
+}
 
   return (
     <Card>
@@ -56,11 +89,7 @@ interface AIEstimationProps {
   vehicleDetails: VehicleDetails;
   selectedServices: Service[];
   customizations: Customization[];
-<<<<<<< HEAD
-  uploadedFiles: UploadedFile[];
-=======
   uploadedFiles: fileUpload[];
->>>>>>> c51587409a955418810f61cf695203e9470b93e5
 }
 
 interface AIAnalysis {
@@ -193,11 +222,7 @@ export function aiEstimation({ vehicleDetails, selectedServices, customizations,
       </CardContent>
       <CardFooter>
         <Button onClick={generateAIAnalysis} disabled={isAnalyzing}>
-<<<<<<< HEAD
-          {isAnalyzing ? <Spinner className='hover:bg-green-500 to-true-gray-500'/>}
-=======
           {isAnalyzing ? <Spinner className='hover:bg-green-500 to-true-gray-500' />}
->>>>>>> c51587409a955418810f61cf695203e9470b93e5
           {isAnalyzing ? 'Analyzing...' : 'Generate AI Analysis'}
         </Button>
       </CardFooter>

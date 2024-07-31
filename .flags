@@ -1,4 +1,5 @@
 {
-    "app/page.tsx": "blue",
-    ".flags": "grey"
+    "app/page.tsx": "red",
+    ".flags": "grey",
+    "lib/fileUpload.ts": "green"
 }
