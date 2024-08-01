@@ -5,6 +5,9 @@ import ReviewStep from '@/components/assessments/ReviewStep';
 import { api } from '@/convex/_generated/api';
 import { useAction } from 'convex/react';
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import FileUpload from '@/components/FileUpload';
+
 
 export default function SelfAssessmentForm({ services, organizationSlug }: { services: {}[], organizationSlug: string }) {
     const [step, setStep] = useState(0);
@@ -15,35 +18,38 @@ export default function SelfAssessmentForm({ services, organizationSlug }: { ser
         customizations: [],
         images: [],
         videos: [],
+        estimatedTotal: null,
     });
 
     const createSelfAssessment = useAction(api.selfAssessment.createSelfAssessment);
 
     const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const aiEstimationResult = await aiEstimation({
-      vehicleDetails: formData.vehicleInfo,
-      selectedServices: formData.selectedServices,
-      customizations: formData.customizations,
-      uploadedFiles: [...formData.images, ...formData.videos],
-    });
-
-    setFormData(prev => ({ ...prev, estimatedTotal: aiEstimationResult }));
-
-    const result = await createSelfAssessment({
-      organizationId: organizationSlug,
-      ...formData,
-    });
-    // Handle successful submission (e.g., show success message, redirect)
-  } catch (error) {
-    // Handle error (e.g., show error message)
-  }
-};;
+        e.preventDefault();
+        try {
+            const aiEstimationResult = await aiEstimation({
+                vehicleDetails: formData.vehicleInfo,
+                selectedServices: formData.selectedServices,
+                customizations: formData.customizations,
+                uploadedFiles: [...formData.images, ...formData.videos],
+            });
+            setFormData(prev => ({ ...prev, estimatedTotal: aiEstimationResult }));
+            await createSelfAssessment({
+                organizationId: organizationSlug,
+                ...formData,
+            });
+            // Handle successful submission (e.g., show success message, redirect)
+            toast({ title: 'Success', description: 'Self-assessment submitted successfully' });
+        } catch (error) {
+            // Handle error (e.g., show error message)
+            toast({ title: 'Error', description: error.message });
+        }
+    };
 
     const nextStep = () => setStep(step + 1);
     const prevStep = () => setStep(step - 1);
-
+    const updateFormData = (key: string, value: string) => {
+        setFormData(prev => ({ ...prev, [key]: value }));
+    };
     const [formData, setFormData] = useState({
         vehicleInfo: {},
         condition: [],
@@ -86,10 +92,13 @@ export default function SelfAssessmentForm({ services, organizationSlug }: { ser
     return (
         <form onSubmit={handleSubmit}>
             {renderStep()}
-            <div>
-                {step > 0 && <button onClick={prevStep}>Previous</button>}
-                {step < 4 ? <button onClick={nextStep}>Next</button> : <button type="submit">Submit</button>}
+            <div className="flex justify-between">
+                {step > 0 && <Button onClick={prevStep}>Previous</Button>}
+                {step < 4 && <Button onClick={nextStep}>Next</Button>}
+                {step === 4 && <Button type="submit">Submit</Button>}
             </div>
         </form>
-    );
-}
+    </div>
+)
+};
+export default SelfAssessmentForm;

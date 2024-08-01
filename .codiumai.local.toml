@@ -96,4 +96,5 @@ describe("something", () => {
 ## A multiline string, delimited with triple-quotes ("""),
 ## containing import declaration to use in each test file. 
 # overrideImports = """ 
-# import {expect} from "chai"; """
+# import {expect} from "chai"; 
+## """

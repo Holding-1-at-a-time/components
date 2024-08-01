@@ -12,15 +12,13 @@ import { VehicleDetails } from '@/components/VehicleDetails';
 import { ServiceSummary } from '@/components/ServiceSummary';
 import { CustomizationSummary } from '@/components/CustomizationSummary';
 import { FileGallery } from '@/components/FileGallery';
+import { Button } from '@/components/ui/button';
 
 export default function AssessmentReviewPage() {
   const params = useParams();
   const { organization } = useOrganization();
   const assessmentId = params.assessmentId as string;
-
-  const assessment = useQuery(api.assessments.getAssessment, 
-    organization?.id ? { organizationId: organization.id, assessmentId } : 'skip'
-  );
+  const assessment = useQuery(api.assessments.getAssessment, organization?.id ? { organizationId: organization.id, assessmentId } : 'skip' );
 
   if (!assessment) {
     return <Spinner />;
@@ -70,6 +68,12 @@ export default function AssessmentReviewPage() {
             uploadedFiles={[...assessment.images, ...assessment.videos]}
           />
         </div>
+      </div>
+      <div className="mt-8">
+        <p className="text-sm text-gray-600">
+          Please acknowledge that this is a non-binding estimate. The final price may vary based on additional factors.
+        </p>
+        <Button className="mt-4">Acknowledge</Button>
       </div>
     </div>
   );
