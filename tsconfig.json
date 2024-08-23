@@ -1,13 +1,17 @@
 {
   "compilerOptions": {
-    "target": "ESNext", // Use "ESNext" instead of "ES2017" for broader compatibility
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ES6", // Use "ESNext" instead of "ES2017" for broader compatibility
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true, // Typically used for TypeScript projects that don"t output JavaScript
     "esModuleInterop": true,
-    "module": "ESNext", // Use "ESNext" instead of "esnext" for consistency
+    "module": "esnext", // Use "ESNext" instead of "esnext" for consistency
     "moduleResolution": "node", // Use "node" for module resolution in most cases
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -16,18 +20,23 @@
     "sourceMap": true,
     "baseUrl": "./",
     "plugins": [
-      { "name": "next" } // Ensure your Next.js plugin is correctly configured
+      {
+        "name": "next"
+      } // Ensure your Next.js plugin is correctly configured
     ],
     "paths": {
-      "@/*": ["./*"] // Adjust path mapping if your source directory is different
+      "@/*": [
+        "./*"
+      ] // Adjust path mapping if your source directory is different
     }
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
-, "entrypoint.js"  ],
+    ".next/types/**/*.ts",
+    "entrypoint.js"
+  ],
   "exclude": [
     "node_modules"
   ]

@@ -1,3 +1,5 @@
+/components/AI/AIEstimates.ts
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
