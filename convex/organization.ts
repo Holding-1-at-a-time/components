@@ -63,7 +63,5 @@ export const getByorganizationSlug = query({
     if (!org) {
       throw new Error("Organization not found");
     }
-
-    return org;
-  },
-});
+  }
+})
